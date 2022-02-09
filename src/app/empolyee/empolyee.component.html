@@ -1,0 +1,121 @@
+<div *ngIf="showSuccessMsg" class="alert alert-success">
+  <strong>{{sucessMsg}}</strong>
+</div>
+<ul *ngIf="showFailureMsg" class="alert alert-danger">
+  <li *ngFor="let error of serverErrors">
+    {{error}}
+  </li>
+</ul>
+
+<form #empForm="ngForm">
+  <fieldset>
+    <legend>Create Employee</legend>
+    <div class="form-group">
+      <label class="form-label" for="firstName">First Name</label>
+      <input type="text" class="form-control" #firstNameControl="ngModel" [(ngModel)]="emp.firstName" name="firstName"
+        placeholder="Enter employee first name" required>
+    </div>
+    <div class="alert alert-danger" *ngIf="(empForm.submitted ||firstNameControl.touched)  && firstNameControl.invalid">
+      FirstName is Required
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="lastName">Last Name</label>
+      <input type="text" class="form-control" [(ngModel)]="emp.lastName" name="lastName"
+        placeholder="Enter employee last name">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="email">Email</label>
+      <input type="email" class="form-control" #emailControl="ngModel" [(ngModel)]="emp.email" name="email"
+        pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" placeholder="Enter employee email" required>
+    </div>
+    <div *ngIf="(empForm.submitted ||emailControl.touched)  && emailControl.invalid">
+      <div class="alert alert-danger" *ngIf="emailControl.hasError('required')"> Email Is Required </div>
+      <div class="alert alert-danger" *ngIf="emailControl.hasError('pattern')"> Email Is Invalid </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="confirmEmail">Confirm Email</label>
+      <input type="email" class="form-control" [(ngModel)]="emp.confirmEmail" name="confirmEmail"
+        placeholder="Enter employee confirm email">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="gender">Gender</label>
+      <input type="radio" name="gender" [(ngModel)]="emp.gender" value="M">
+      Male
+      <input type="radio" name="gender" [(ngModel)]="emp.gender" value="F">
+      Female
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="salary">Salary</label>
+      <input type="number" class="form-control" [(ngModel)]="emp.salary" name="salary"
+        placeholder="Enter employee Salary">
+    </div>
+    <div class="form-group">
+      <label for="department" class="form-label mt-4"> select Department</label>
+      <select name="did" #didControl="ngModel" required [(ngModel)]="emp.did" class="form-control">
+        <option *ngFor="let dept of depts" value="{{dept.did}}">{{dept.dName}}</option>
+      </select>
+    </div>
+    <div class="alert alert-danger" *ngIf="(empForm.submitted ||didControl.touched)  && didControl.invalid">
+      Department Is Required
+    </div>
+
+    <button type="submit" *ngIf="!emp.eid" [disabled]="empForm.invalid" (click)="postEmployee();empForm.reset()"
+      class="btn btn-primary">Create</button>
+    <button type="submit" *ngIf="emp.eid" [disabled]="empForm.invalid" (click)="putEmployee();empForm.reset()"
+      class="btn btn-primary">Edit</button>
+    <span *ngIf="emp.eid"> | </span>
+    <button type="submit" *ngIf="emp.eid" (click)="emp.eid=0;" class="btn btn-primary">New</button>
+  </fieldset>
+</form>
+
+<div class="form-group">
+  <select (change)="getEmployeesByDid()" [(ngModel)]="did" class="form-control">
+    <option value="0">Select A Department</option>
+    <option *ngFor="let dept of depts" value="{{dept.did}}">{{dept.dName}}</option>
+  </select>
+</div>
+<div class="container">
+  <span *ngIf="empsFiltered.length==0">No Record(s) Found</span>
+  <span *ngIf="empsFiltered.length!=0">{{emps.length}} Record(s) Found</span>
+  <div *ngIf="empsFiltered.length!=0">
+    <div class="form-group row">
+      <div class="col-sm-10">
+        <input type="text" [(ngModel)]="search" class="form-control-plaintext" placeholder="search employees">
+      </div>
+    </div>
+    <table class="table table-hover">
+      <thead>
+        <tr class="table-primary">
+          <th scope="col" style="cursor:pointer" (click)="sort('eid')">Eid</th>
+          <th scope="col" style="cursor:pointer" (click)="sort('fullName')">Employee Full Name</th>
+          <th scope="col" style="cursor:pointer" (click)="sort('gender')">Gender</th>
+          <th scope="col" style="cursor:pointer" (click)="sort('salary')">Salary</th>
+          <th scope="col" style="cursor:pointer" (click)="sort('dName')">DName</th>
+          <th scope="col">Operations</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let emp of empsFiltered  |filter:search
+                                       | orderBy:key:reverse
+                                       | paginate:{itemsPerPage:5,currentPage:p}">
+          <td>{{emp.eid}}</td>
+          <td>{{emp.fullName}}</td>
+          <td>{{emp.gender}}</td>
+          <td>{{emp.salary}}</td>
+          <td>{{emp.department.dName}}</td>
+          <td> <span style="cursor:pointer;text-decoration:underline" (click)="editEmployee(emp)">Edit</span>|
+          <span style="cursor:pointer;text-decoration:underline" (click)="deleteEmployee(emp)">Delete</span> </td>
+
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <ul class="pagination">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </ul>
+    </div>
+  </div>
+
+</div>

@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'OMSClient';
+  name: string = "Manzoor The Trainer! Test";
+
+  clickMe() {
+    console.log("You have clicked me " + this.name);
+  }
+
 }
