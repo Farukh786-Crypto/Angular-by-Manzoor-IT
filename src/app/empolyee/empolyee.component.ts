@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { employee } from './employee';
 import { department } from '../department/department';
+import { OmsService } from '../Utility/oms.service';
 
 @Component({
   selector: 'app-empolyee',
@@ -23,7 +24,7 @@ export class EmpolyeeComponent implements OnInit {
   sucessMsg: string = "";
   serverErrors: string[] = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private omsservice:OmsService) { }
 
   ngOnInit(): void {
     this.getDepartments();
@@ -65,7 +66,7 @@ export class EmpolyeeComponent implements OnInit {
     console.log("Called Successfully!");
     console.log(this.emp);
     //this.emp.did = parseInt(this.emp.did.toString());
-    this.http.post<employee>("https://localhost:44336/api/Employees", this.emp).subscribe(res => {
+    this.omsservice.postEmployee(this.emp).subscribe(res => {
       console.log(res);
       //this.emp = new employee();
       this.getEmployees();
@@ -94,7 +95,7 @@ export class EmpolyeeComponent implements OnInit {
   }
 
   getEmployees() {
-    this.http.get<employee[]>("https://localhost:44336/api/Employees").subscribe(res => {
+    this.omsservice.getEmployees().subscribe(res => {
       console.log(res);
       this.emps = res;
       this.empsFiltered = this.emps;
@@ -102,7 +103,7 @@ export class EmpolyeeComponent implements OnInit {
   }
 
   getDepartments() {
-    this.http.get<department[]>("https://localhost:44336/api/Department").subscribe(res => {
+    this.omsservice.getDepartments().subscribe(res => {
       console.log(res);
       this.depts = res;
     });
@@ -117,7 +118,7 @@ export class EmpolyeeComponent implements OnInit {
     console.log("Called Update Successfully!");
     console.log(this.emp);
     //this.emp.did = parseInt(this.emp.did.toString());
-    this.http.put<employee>("https://localhost:44336/api/Employees/" + this.emp.eid, this.emp).subscribe(res => {
+    this.omsservice.putEmployee(this.emp.eid,this.emp).subscribe(res => {
       console.log(res);
       //this.emp = new employee();
       this.getEmployees();
@@ -147,7 +148,7 @@ export class EmpolyeeComponent implements OnInit {
     if (confirm('Are you sure you want to delete Mr.' + emp.firstName)) {
       console.log(this.emp);
       //this.emp.did = parseInt(this.emp.did.toString());
-      this.http.delete<employee>("https://localhost:44336/api/Employees/" + emp.eid).subscribe(res => {
+      this.omsservice.deleteEmployee(emp.eid).subscribe(res => {
         console.log(res);
         this.getEmployees();
         this.showSuccessMsg = true;

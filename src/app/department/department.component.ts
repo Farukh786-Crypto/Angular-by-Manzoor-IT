@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { department } from './department';
+import { OmsService } from '../Utility/oms.service';
 
 @Component({
   selector: 'app-department',
@@ -24,10 +24,10 @@ export class DepartmentComponent implements OnInit {
 
   depts:department[]=[] ;
 
-  constructor(private http:HttpClient) { }
+  constructor(private omsservice:OmsService) { }
 
   ngOnInit(): void {
-    this.http.get<department[]>("https://localhost:44336/api/Department").subscribe(res => {
+    this.omsservice.getDepartments().subscribe((res) => {
       console.log(res);
       this.depts = res;
     });
