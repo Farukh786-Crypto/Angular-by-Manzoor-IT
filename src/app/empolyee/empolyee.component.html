@@ -24,10 +24,12 @@
       <input type="text" class="form-control" [(ngModel)]="emp.lastName" name="lastName"
         placeholder="Enter employee last name">
     </div>
+    <!-- just use [hidden]="emp.eid" for hide email -->
     <div class="form-group">
       <label class="form-label" for="email">Email</label>
-      <input type="email" class="form-control" #emailControl="ngModel" [(ngModel)]="emp.email" name="email"
-        pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" placeholder="Enter employee email" required>
+      <input type="email" class="form-control" #emailControl="ngModel"
+        [(ngModel)]="emp.email" name="email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+        placeholder="Enter employee email" required>
     </div>
     <div *ngIf="(empForm.submitted ||emailControl.touched)  && emailControl.invalid">
       <div class="alert alert-danger" *ngIf="emailControl.hasError('required')"> Email Is Required </div>
@@ -35,8 +37,8 @@
     </div>
 
     <div class="form-group">
-      <label class="form-label" for="confirmEmail">Confirm Email</label>
-      <input type="email" class="form-control" [(ngModel)]="emp.confirmEmail" name="confirmEmail"
+      <label class="form-label" for="confirmEmail" >Confirm Email</label>
+      <input type="email" class="form-control" [(ngModel)]="emp.confirmEmail" [hidden]="emp.eid" name="confirmEmail"
         placeholder="Enter employee confirm email">
     </div>
     <div class="form-group">
@@ -106,7 +108,7 @@
           <td>{{emp.salary}}</td>
           <td>{{emp.department.dName}}</td>
           <td> <span style="cursor:pointer;text-decoration:underline" (click)="editEmployee(emp)">Edit</span>|
-          <span style="cursor:pointer;text-decoration:underline" (click)="deleteEmployee(emp)">Delete</span> </td>
+            <span style="cursor:pointer;text-decoration:underline" (click)="deleteEmployee(emp)">Delete</span> </td>
 
         </tr>
       </tbody>

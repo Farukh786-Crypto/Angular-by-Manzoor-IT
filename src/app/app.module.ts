@@ -11,6 +11,14 @@ import { DepartmentComponent } from './department/department.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { EmpolyeeComponent } from './empolyee/empolyee.component';
+import { LoginComponent } from './login/login.component';
+import { DashboardComponent } from './admin/dashboard/dashboard.component';
+import { RouterModule } from '@angular/router';
+import { myroute } from './Routing/route.config';
+import { RegisterComponent } from './register/register.component';
+import { NotfoundComponent } from './notfound/notfound.component';
+import { CookieService } from 'ngx-cookie-service';
+import { AngularWebStorageModule } from 'angular-web-storage';
 
 @NgModule({
   declarations: [
@@ -18,7 +26,11 @@ import { EmpolyeeComponent } from './empolyee/empolyee.component';
     DepartmentComponent,
     HeaderComponent,
     FooterComponent,
-    EmpolyeeComponent
+    EmpolyeeComponent,
+    LoginComponent,
+    DashboardComponent,
+    RegisterComponent,
+    NotfoundComponent
   ],
   imports: [
     BrowserModule,
@@ -26,9 +38,11 @@ import { EmpolyeeComponent } from './empolyee/empolyee.component';
     NgxPaginationModule,
     Ng2SearchPipeModule,
     OrderModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule.forRoot(myroute),
+    AngularWebStorageModule
   ],
-  providers: [],
+  providers: [ CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

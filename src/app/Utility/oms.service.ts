@@ -35,7 +35,6 @@ export class OmsService {
   putEmployee(eid:number,emp:employee) {
     return this.http.put<employee>(this.baseUrl + "/Employees/"+eid,emp);
   }
-
   postEmployee(emp: employee) {
     return this.http.post<employee>(this.baseUrl + "/Employees", emp);
   }

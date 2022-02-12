@@ -24,7 +24,7 @@ export class EmpolyeeComponent implements OnInit {
   sucessMsg: string = "";
   serverErrors: string[] = [];
 
-  constructor(private http: HttpClient,private omsservice:OmsService) { }
+  constructor(private http: HttpClient, private omsservice: OmsService) { }
 
   ngOnInit(): void {
     this.getDepartments();
@@ -109,16 +109,16 @@ export class EmpolyeeComponent implements OnInit {
     });
   }
 
-  editEmployee(emp:employee) {
+  editEmployee(emp: employee) {
     this.emp = emp;
     console.log(emp);
-    console.log("Department name",emp.department.dName);
+    console.log("Department name", emp.department.dName);
   }
   putEmployee() {
     console.log("Called Update Successfully!");
     console.log(this.emp);
     //this.emp.did = parseInt(this.emp.did.toString());
-    this.omsservice.putEmployee(this.emp.eid,this.emp).subscribe(res => {
+    this.omsservice.putEmployee(this.emp.eid, this.emp).subscribe(res => {
       console.log(res);
       //this.emp = new employee();
       this.getEmployees();
@@ -144,7 +144,7 @@ export class EmpolyeeComponent implements OnInit {
       }
     );
   }
-  deleteEmployee(emp:employee) {
+  deleteEmployee(emp: employee) {
     if (confirm('Are you sure you want to delete Mr.' + emp.firstName)) {
       console.log(this.emp);
       //this.emp.did = parseInt(this.emp.did.toString());
